@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Admin - Application Logs{% endblock %}
+{% block content %}
+  <h2>Application Logs</h2>
+  <pre style="background:#f8f9fa; padding:10px; height:400px; overflow:auto;">
+    {% for line in logs %}
+      {{ line }}
+    {% endfor %}
+  </pre>
+{% endblock %}
