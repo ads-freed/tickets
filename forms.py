@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SubmitField, FileField, SelectField, RadioField
+from wtforms import StringField, PasswordField, TextAreaField, SubmitField, FileField, SelectField, RadioField, SelectMultipleField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class LoginForm(FlaskForm):
@@ -41,3 +41,22 @@ class MessageForm(FlaskForm):
     message = TextAreaField('Message', validators=[DataRequired()])
     attachment = FileField('Attachment')
     submit = SubmitField('Send')
+
+class UserEditForm(FlaskForm):
+    role = SelectField(
+        'Role', 
+        choices=[('customer', 'Customer'), ('support', 'Support'), ('admin', 'Admin')],
+        validators=[DataRequired()]
+    )
+    permissions = SelectMultipleField(
+        'Permissions',
+        choices=[
+            ('view', 'View'),
+            ('create', 'Create'),
+            ('update', 'Update'),
+            ('delete', 'Delete'),
+            ('edit', 'Edit')
+        ],
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Update User')
