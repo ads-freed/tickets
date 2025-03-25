@@ -3,7 +3,7 @@
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white">
           <h4>Your Profile</h4>
         </div>
@@ -31,6 +31,22 @@
               {{ form.submit(class="btn btn-primary btn-lg") }}
             </div>
           </form>
+        </div>
+      </div>
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h5>Your Permissions</h5>
+        </div>
+        <div class="card-body">
+          {% if permissions %}
+            <ul class="list-group">
+              {% for perm in permissions.split(',') %}
+                <li class="list-group-item">{{ perm }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No permissions assigned.</p>
+          {% endif %}
         </div>
       </div>
     </div>
