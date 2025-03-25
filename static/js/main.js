@@ -12,9 +12,14 @@ toastr.options = {
   "progressBar": true
 };
 
-// Listen for ticket events (ticket creation, reply, etc.)
+  // Listen for ticket events (ticket creation, reply, etc.)
 socket.on('ticket_event', function(data) {
   console.log("Ticket Event:", data);
+  // Example: Update a ticket notification badge or display a pop-up
+  // updateTicketNotificationBadge(data);
+  // Optionally, display a toast/pop-up using a notification library
+});
+
   // Increase the notification count for ticket events
   ticketNotifCount++;
   updateNotificationBadge();
@@ -29,6 +34,11 @@ socket.on('ticket_event', function(data) {
 // Listen for private message notifications
 socket.on('private_message', function(data) {
   console.log("Private Message:", data);
+  // Example: Update private message notification icon
+  // updatePrivateMessageBadge(data);
+  // Optionally, display a toast/pop-up with message preview
+});
+
   // Increase the notification count for private messages
   privateNotifCount++;
   updateNotificationBadge();
