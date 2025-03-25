@@ -24,7 +24,19 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if current_user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <!-- Tickets Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="ticketsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Tickets
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="ticketsDropdown">
+                <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">All Tickets</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('dashboard', status='open') }}">Open</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('dashboard', status='in progress') }}">In Progress</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('dashboard', status='closed') }}">Closed</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('dashboard', status='deleted') }}">Deleted</a></li>
+              </ul>
+            </li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('ticket_create') }}">New Ticket</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('chat_users') }}">Chat</a></li>
             {% if current_user.role == 'admin' %}
