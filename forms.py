@@ -17,7 +17,7 @@ class RegistrationForm(FlaskForm):
 class ProfileForm(FlaskForm):
     name = StringField('Name', validators=[Optional(), Length(max=120)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    # New fields for password update
+    # Fields for password update (optional)
     new_password = PasswordField('New Password', validators=[Optional(), Length(min=6)])
     confirm_password = PasswordField('Confirm New Password', validators=[Optional(), EqualTo('new_password', message='Passwords must match')])
     submit = SubmitField('Update Profile')
