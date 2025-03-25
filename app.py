@@ -125,13 +125,16 @@ def profile():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    # Get filter parameter (e.g., ?status=open)
+    status_filter = request.args.get('status')
     if current_user.role in ['admin', 'support']:
-        # Admin/support dashboard: show all tickets with summary statistics (dummy stats here)
-        tickets = Ticket.query.order_by(Ticket.created_at.desc()).all()
+        query = Ticket.query
+        if status_filter:
+            query = query.filter_by(status=status_filter)
+        tickets = query.order_by(Ticket.created_at.desc()).all()
     else:
-        # Customer dashboard: show only user’s tickets
         tickets = Ticket.query.filter_by(creator_id=current_user.id).order_by(Ticket.created_at.desc()).all()
-    return render_template('dashboard.html', tickets=tickets)
+    return render_template('dashboard.html', tickets=tickets, status_filter=status_filter)
 
 @app.route('/ticket/new', methods=['GET', 'POST'])
 @login_required
