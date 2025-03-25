@@ -1,4 +1,5 @@
 # tickets
+```
 tickets/
 ├── app.py
 ├── config.py
@@ -26,3 +27,4 @@ tickets/
 │   └── uploads/      # uploaded files will be stored here
 └── logs/
     └── app.log
+```
