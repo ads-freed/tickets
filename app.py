@@ -9,6 +9,7 @@ from flask_limiter.util import get_remote_address
 from werkzeug.utils import secure_filename
 import logging
 from logging.handlers import RotatingFileHandler
+from models import User, db
 
 # Initialize app and configurations
 app = Flask(__name__)
