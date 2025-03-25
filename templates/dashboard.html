@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Dashboard</h2>
+    {% if current_user.role in ['admin', 'support'] %}
+      <!-- Display visual statistics or summary cards here -->
+      <div>
+        <span class="badge bg-primary">Open: 10</span>
+        <span class="badge bg-warning text-dark">In Progress: 5</span>
+        <span class="badge bg-success">Closed: 20</span>
+      </div>
+    {% endif %}
+  </div>
+  {% if tickets %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Ticket Number</th>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+          <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td>{{ ticket.title }}</td>
+            <td>
+              <span class="badge 
+                {% if ticket.status == 'open' %}bg-primary{% elif ticket.status == 'in progress' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                {{ ticket.status }}
+              </span>
+            </td>
+            <td>{{ ticket.created_at.strftime('%Y-%m-%d') }}</td>
+            <td>
+              <a href="{{ url_for('ticket_detail', ticket_id=ticket.id) }}" class="btn btn-sm btn-outline-secondary">
+                View
+              </a>
+              {% if current_user.role in ['admin','support'] %}
+                <!-- Add extra action buttons if needed -->
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No tickets found.</p>
+  {% endif %}
+{% endblock %}
