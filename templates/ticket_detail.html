@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Ticket Detail{% endblock %}
+{% block content %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>{{ ticket.ticket_number }} - {{ ticket.title }}</h4>
+      <small class="text-muted">Created on {{ ticket.created_at.strftime('%Y-%m-%d') }}</small>
+    </div>
+    <div class="card-body">
+      <p><strong>Status:</strong>
+        <span class="badge 
+          {% if ticket.status == 'open' %}bg-primary{% elif ticket.status == 'in progress' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+          {{ ticket.status }}
+        </span>
+      </p>
+      <p>{{ ticket.description }}</p>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <h5>Replies</h5>
+    {% if ticket.replies.count() > 0 %}
+      {% for reply in ticket.replies %}
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <small class="text-muted">User ID {{ reply.user_id }} - {{ reply.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+            <p>{{ reply.message }}</p>
+            {% if reply.attachment %}
+              <a href="{{ url_for('uploaded_file', filename=reply.attachment) }}" class="btn btn-sm btn-outline-info">Download Attachment</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No replies yet.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Add a Reply
+    </div>
+    <div class="card-body">
+      <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.message.label(class="form-label") }}
+          {{ form.message(class="form-control", rows="4") }}
+        </div>
+        <div class="mb-3">
+          {{ form.attachment.label(class="form-label") }}
+          {{ form.attachment(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
