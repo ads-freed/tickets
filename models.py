@@ -10,6 +10,8 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(120))
     password_hash = db.Column(db.String(128))
     role = db.Column(db.String(20), default='customer')  # roles: customer, support, admin
+    # New permissions field: comma-separated list (e.g., "view,create,update")
+    permissions = db.Column(db.String(200), default='view')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     # Relationships
     tickets = db.relationship('Ticket', backref='creator', lazy='dynamic')
