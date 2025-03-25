@@ -13,6 +13,7 @@ from logging.handlers import RotatingFileHandler
 # Initialize app and configurations
 app = Flask(__name__)
 app.config.from_object('config.Config')
+app.config['DEBUG'] = True
 
 # Setup database and login manager
 db = SQLAlchemy(app)
@@ -27,7 +28,7 @@ limiter = Limiter(app, key_func=get_remote_address)
 
 # Import models and forms (models import login_manager and db defined above)
 from models import User, Ticket, TicketReply, Message
-from forms import LoginForm, RegistrationForm, ProfileForm, TicketForm, ReplyForm, MessageForm
+from forms import LoginForm, RegistrationForm, ProfileForm, TicketForm, ReplyForm, MessageForm, UserEditForm
 
 # Ensure upload folder exists
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -234,6 +235,25 @@ def admin_logs():
     except Exception:
         lines = []
     return render_template('admin/logs.html', logs=lines)
+
+@app.route('/admin/user/<int:user_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    if current_user.role != 'admin':
+        abort(403)
+    user = User.query.get_or_404(user_id)
+    form = UserEditForm(obj=user)
+    if form.validate_on_submit():
+        user.role = form.role.data
+        # Store the selected permissions as a comma-separated string.
+        user.permissions = ','.join(form.permissions.data)
+        db.session.commit()
+        flash('User updated successfully.', 'success')
+        return redirect(url_for('admin_users'))
+    # Prepopulate the permissions field if they exist.
+    if request.method == 'GET' and user.permissions:
+        form.permissions.data = user.permissions.split(',')
+    return render_template('admin/edit_user.html', form=form, user=user)
 
 # Serve uploaded files
 @app.route('/uploads/<filename>')
