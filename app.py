@@ -108,8 +108,15 @@ def profile():
     if form.validate_on_submit():
         current_user.name = form.name.data
         current_user.email = form.email.data
+        
+        # Check if the new password field is filled
+        if form.new_password.data:
+            current_user.set_password(form.new_password.data)
+            flash('Your password has been updated.', 'success')
+        else:
+            flash('Profile updated.', 'success')
+        
         db.session.commit()
-        flash('Profile updated.', 'success')
         return redirect(url_for('profile'))
     return render_template('profile.html', form=form)
 
