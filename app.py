@@ -109,7 +109,7 @@ def profile():
         current_user.name = form.name.data
         current_user.email = form.email.data
         
-        # Check if the new password field is filled
+        # Update password if provided
         if form.new_password.data:
             current_user.set_password(form.new_password.data)
             flash('Your password has been updated.', 'success')
@@ -118,7 +118,7 @@ def profile():
         
         db.session.commit()
         return redirect(url_for('profile'))
-    return render_template('profile.html', form=form)
+    return render_template('profile.html', form=form, permissions=current_user.permissions)
 
 # Dashboard and Ticket Management
 
