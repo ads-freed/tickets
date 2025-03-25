@@ -208,8 +208,9 @@ def private_chat(user_id):
         socketio.emit('private_message', {
             'sender': current_user.username,
             'preview': msg.message[:20],
-            'recipient_id': recipient.id
-        }, broadcast=True)
+            'recipient_id': recipient.id,
+            'created_at': msg.created_at.strftime('%H:%M')
+        }, room=str(recipient.id))
         return redirect(url_for('private_chat', user_id=recipient.id))
     return render_template('chat.html', recipient=recipient, form=form, messages=messages)
 
