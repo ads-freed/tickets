@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SubmitField, FileField, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, SubmitField, FileField, SelectField, RadioField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class LoginForm(FlaskForm):
@@ -22,6 +22,12 @@ class ProfileForm(FlaskForm):
 class TicketForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 140)])
     description = TextAreaField('Description', validators=[DataRequired()])
+    priority = RadioField(
+        'Priority', 
+        choices=[('normal', 'Normal'), ('critical', 'Critical'), ('high', 'High'), ('urgent', 'Urgent')],
+        default='normal',
+        validators=[DataRequired()]
+    )
     attachment = FileField('Attachment')
     submit = SubmitField('Create Ticket')
 
