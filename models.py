@@ -1,3 +1,4 @@
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from app import db, login_manager
 from flask_login import UserMixin
@@ -62,3 +63,11 @@ class Message(db.Model):
     message = db.Column(db.Text)
     attachment = db.Column(db.String(140))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class PrivateMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    attachment = db.Column(db.String(255), nullable=True)  # File path
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
